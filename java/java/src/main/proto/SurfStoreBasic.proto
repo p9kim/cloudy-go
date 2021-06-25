@@ -1,0 +1,76 @@
+syntax = "proto3";
+
+package surfstore;
+
+service MetadataStore {
+    rpc Ping (Empty) returns (Empty) {}
+
+    rpc ReadFile (FileInfo) returns (FileInfo) {}
+
+    rpc ModifyFile (FileInfo) returns (WriteResult) {}
+
+    rpc DeleteFile (FileInfo) returns (WriteResult) {}
+
+    rpc IsLeader (Empty) returns (SimpleAnswer) {}
+
+    rpc Crash(Empty) returns (Empty) {}
+
+    rpc Restore(Empty) returns (Empty) {}
+
+    rpc IsCrashed(Empty) returns (SimpleAnswer) {}
+
+    rpc AppendLog(StateMachine) returns (SimpleAnswer) {}
+    
+    rpc updateMetaMap(StateMachine) returns (SimpleAnswer) {}
+
+}
+
+service BlockStore {
+    rpc Ping (Empty) returns (Empty) {}
+
+    rpc StoreBlock (Block) returns (Empty) {}
+
+    rpc GetBlock (Block) returns (Block) {}
+
+
+    rpc HasBlock (Block) returns (SimpleAnswer) {}
+}
+
+message Empty { }
+
+message FileInfo {
+    string filename = 1;
+    int32 version = 2;
+    repeated string blocklist = 3;
+}
+
+message Block {
+    string hash = 1;
+    bytes data = 2;
+}
+
+message WriteResult {
+    enum Result {
+        OK = 0;
+        OLD_VERSION = 1;
+        MISSING_BLOCKS = 2;
+        NOT_LEADER = 3;
+    }
+    Result result = 1;
+    int32 current_version = 2;
+    repeated string missing_blocks = 3;
+}
+
+message SimpleAnswer {
+    bool answer = 1;
+}
+
+message NodeList {
+    repeated int32 nodelist = 1;
+}
+
+message StateMachine {
+	int32 index = 1;
+	string stateMachine = 2;
+	map<string, FileInfo> commitedMap = 3;
+}

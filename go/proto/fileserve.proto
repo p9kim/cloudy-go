@@ -1,22 +1,54 @@
 syntax = "proto3";
 package fileserve;
 
-option go_package = "/;fileserve";
+option go_package = "/;cloudy";
 
-service Ping {
+service MetaData {
     rpc SayHello (Message) returns (Message) {}
+
+    rpc ReadFile (FileInfo) returns (FileInfo) {}
+
+    rpc ModifyFile (FileInfo) returns (WriteResult) {}
 }
 
-service Upload {
-    rpc UploadBlock (stream DataBlock) returns (UploadStatus) {}
+service BlockData {
+
+    rpc SayHello (Message) returns (Message) {}
+
+    //rpc UploadBlock (stream DataBlock) returns (UploadStatus) {}
+
+    rpc UploadBlock (DataBlock) returns (UploadStatus) {}
+
+    rpc RetrieveBlock (DataBlock) returns (DataBlock) {}
+
+    rpc HasBlock (DataBlock) returns (SimpleAnswer) {}
+
 }
 
 message Message {
     string body = 1;
 }
 
+message SimpleAnswer {
+    bool answer = 1;
+}
+
 message FileInfo {
-    string filetype = 1;
+    string filename = 1;
+    int64 version = 2;
+    repeated string blocklist = 3;
+}
+
+message WriteResult {
+    enum Result {
+        OK = 0;
+        OLD_VERSION = 1;
+        MISSING_BLOCKS = 2;
+        NOT_LEADER = 3;
+    }
+    Result result = 1;
+    int64 current_version = 2;
+    repeated string missing_blocks = 3;
 }
 
 message UploadStatus {
@@ -30,5 +62,6 @@ message UploadStatus {
 }
 
 message DataBlock {
+    string hash = 1;
     bytes data = 2;
 }

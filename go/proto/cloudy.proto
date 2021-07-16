@@ -1,27 +1,29 @@
 syntax = "proto3";
 
-package surfstore;
+package cloudygoproto;
+
+option go_package = "/;cloudyserve";
 
 service MetadataStore {
     rpc Ping (Empty) returns (Empty) {}
 
-    rpc ReadFile (FileInfo) returns (FileInfo) {}
+    //rpc ReadFile (FileInfo) returns (FileInfo) {}
 
-    rpc ModifyFile (FileInfo) returns (WriteResult) {}
+    //rpc ModifyFile (FileInfo) returns (WriteResult) {}
 
-    rpc DeleteFile (FileInfo) returns (WriteResult) {}
+    //rpc DeleteFile (FileInfo) returns (WriteResult) {}
 
-    rpc IsLeader (Empty) returns (SimpleAnswer) {}
+    //rpc IsLeader (Empty) returns (SimpleAnswer) {}
 
-    rpc Crash(Empty) returns (Empty) {}
+    //rpc Crash(Empty) returns (Empty) {}
 
-    rpc Restore(Empty) returns (Empty) {}
+    //rpc Restore(Empty) returns (Empty) {}
 
-    rpc IsCrashed(Empty) returns (SimpleAnswer) {}
+    //rpc IsCrashed(Empty) returns (SimpleAnswer) {}
 
-    rpc AppendLog(StateMachine) returns (SimpleAnswer) {}
+    //rpc AppendLog(StateMachine) returns (SimpleAnswer) {}
     
-    rpc updateMetaMap(StateMachine) returns (SimpleAnswer) {}
+    //rpc updateMetaMap(StateMachine) returns (SimpleAnswer) {}
 
 }
 
@@ -31,7 +33,6 @@ service BlockStore {
     rpc StoreBlock (Block) returns (Empty) {}
 
     rpc GetBlock (Block) returns (Block) {}
-
 
     rpc HasBlock (Block) returns (SimpleAnswer) {}
 }

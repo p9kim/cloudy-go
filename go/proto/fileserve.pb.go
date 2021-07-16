@@ -2,9 +2,9 @@
 // versions:
 // 	protoc-gen-go v1.26.0
 // 	protoc        v3.17.0
-// source: fileserve.proto
+// source: proto/fileserve.proto
 
-package fileserve
+package cloudy
 
 import (
 	context "context"
@@ -23,6 +23,58 @@ const (
 	// Verify that runtime/protoimpl is sufficiently up-to-date.
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
+
+type WriteResult_Result int32
+
+const (
+	WriteResult_OK             WriteResult_Result = 0
+	WriteResult_OLD_VERSION    WriteResult_Result = 1
+	WriteResult_MISSING_BLOCKS WriteResult_Result = 2
+	WriteResult_NOT_LEADER     WriteResult_Result = 3
+)
+
+// Enum value maps for WriteResult_Result.
+var (
+	WriteResult_Result_name = map[int32]string{
+		0: "OK",
+		1: "OLD_VERSION",
+		2: "MISSING_BLOCKS",
+		3: "NOT_LEADER",
+	}
+	WriteResult_Result_value = map[string]int32{
+		"OK":             0,
+		"OLD_VERSION":    1,
+		"MISSING_BLOCKS": 2,
+		"NOT_LEADER":     3,
+	}
+)
+
+func (x WriteResult_Result) Enum() *WriteResult_Result {
+	p := new(WriteResult_Result)
+	*p = x
+	return p
+}
+
+func (x WriteResult_Result) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (WriteResult_Result) Descriptor() protoreflect.EnumDescriptor {
+	return file_proto_fileserve_proto_enumTypes[0].Descriptor()
+}
+
+func (WriteResult_Result) Type() protoreflect.EnumType {
+	return &file_proto_fileserve_proto_enumTypes[0]
+}
+
+func (x WriteResult_Result) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use WriteResult_Result.Descriptor instead.
+func (WriteResult_Result) EnumDescriptor() ([]byte, []int) {
+	return file_proto_fileserve_proto_rawDescGZIP(), []int{3, 0}
+}
 
 type UploadStatus_Status int32
 
@@ -57,11 +109,11 @@ func (x UploadStatus_Status) String() string {
 }
 
 func (UploadStatus_Status) Descriptor() protoreflect.EnumDescriptor {
-	return file_fileserve_proto_enumTypes[0].Descriptor()
+	return file_proto_fileserve_proto_enumTypes[1].Descriptor()
 }
 
 func (UploadStatus_Status) Type() protoreflect.EnumType {
-	return &file_fileserve_proto_enumTypes[0]
+	return &file_proto_fileserve_proto_enumTypes[1]
 }
 
 func (x UploadStatus_Status) Number() protoreflect.EnumNumber {
@@ -70,7 +122,7 @@ func (x UploadStatus_Status) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use UploadStatus_Status.Descriptor instead.
 func (UploadStatus_Status) EnumDescriptor() ([]byte, []int) {
-	return file_fileserve_proto_rawDescGZIP(), []int{2, 0}
+	return file_proto_fileserve_proto_rawDescGZIP(), []int{4, 0}
 }
 
 type Message struct {
@@ -84,7 +136,7 @@ type Message struct {
 func (x *Message) Reset() {
 	*x = Message{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_fileserve_proto_msgTypes[0]
+		mi := &file_proto_fileserve_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -97,7 +149,7 @@ func (x *Message) String() string {
 func (*Message) ProtoMessage() {}
 
 func (x *Message) ProtoReflect() protoreflect.Message {
-	mi := &file_fileserve_proto_msgTypes[0]
+	mi := &file_proto_fileserve_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -110,7 +162,7 @@ func (x *Message) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Message.ProtoReflect.Descriptor instead.
 func (*Message) Descriptor() ([]byte, []int) {
-	return file_fileserve_proto_rawDescGZIP(), []int{0}
+	return file_proto_fileserve_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *Message) GetBody() string {
@@ -120,18 +172,67 @@ func (x *Message) GetBody() string {
 	return ""
 }
 
+type SimpleAnswer struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Answer bool `protobuf:"varint,1,opt,name=answer,proto3" json:"answer,omitempty"`
+}
+
+func (x *SimpleAnswer) Reset() {
+	*x = SimpleAnswer{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_fileserve_proto_msgTypes[1]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *SimpleAnswer) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SimpleAnswer) ProtoMessage() {}
+
+func (x *SimpleAnswer) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_fileserve_proto_msgTypes[1]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SimpleAnswer.ProtoReflect.Descriptor instead.
+func (*SimpleAnswer) Descriptor() ([]byte, []int) {
+	return file_proto_fileserve_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *SimpleAnswer) GetAnswer() bool {
+	if x != nil {
+		return x.Answer
+	}
+	return false
+}
+
 type FileInfo struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Filetype string `protobuf:"bytes,1,opt,name=filetype,proto3" json:"filetype,omitempty"`
+	Filename  string   `protobuf:"bytes,1,opt,name=filename,proto3" json:"filename,omitempty"`
+	Version   int64    `protobuf:"varint,2,opt,name=version,proto3" json:"version,omitempty"`
+	Blocklist []string `protobuf:"bytes,3,rep,name=blocklist,proto3" json:"blocklist,omitempty"`
 }
 
 func (x *FileInfo) Reset() {
 	*x = FileInfo{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_fileserve_proto_msgTypes[1]
+		mi := &file_proto_fileserve_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -144,7 +245,7 @@ func (x *FileInfo) String() string {
 func (*FileInfo) ProtoMessage() {}
 
 func (x *FileInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_fileserve_proto_msgTypes[1]
+	mi := &file_proto_fileserve_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -157,14 +258,91 @@ func (x *FileInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FileInfo.ProtoReflect.Descriptor instead.
 func (*FileInfo) Descriptor() ([]byte, []int) {
-	return file_fileserve_proto_rawDescGZIP(), []int{1}
+	return file_proto_fileserve_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *FileInfo) GetFiletype() string {
+func (x *FileInfo) GetFilename() string {
 	if x != nil {
-		return x.Filetype
+		return x.Filename
 	}
 	return ""
+}
+
+func (x *FileInfo) GetVersion() int64 {
+	if x != nil {
+		return x.Version
+	}
+	return 0
+}
+
+func (x *FileInfo) GetBlocklist() []string {
+	if x != nil {
+		return x.Blocklist
+	}
+	return nil
+}
+
+type WriteResult struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Result         WriteResult_Result `protobuf:"varint,1,opt,name=result,proto3,enum=fileserve.WriteResult_Result" json:"result,omitempty"`
+	CurrentVersion int64              `protobuf:"varint,2,opt,name=current_version,json=currentVersion,proto3" json:"current_version,omitempty"`
+	MissingBlocks  []string           `protobuf:"bytes,3,rep,name=missing_blocks,json=missingBlocks,proto3" json:"missing_blocks,omitempty"`
+}
+
+func (x *WriteResult) Reset() {
+	*x = WriteResult{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_fileserve_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *WriteResult) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WriteResult) ProtoMessage() {}
+
+func (x *WriteResult) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_fileserve_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WriteResult.ProtoReflect.Descriptor instead.
+func (*WriteResult) Descriptor() ([]byte, []int) {
+	return file_proto_fileserve_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *WriteResult) GetResult() WriteResult_Result {
+	if x != nil {
+		return x.Result
+	}
+	return WriteResult_OK
+}
+
+func (x *WriteResult) GetCurrentVersion() int64 {
+	if x != nil {
+		return x.CurrentVersion
+	}
+	return 0
+}
+
+func (x *WriteResult) GetMissingBlocks() []string {
+	if x != nil {
+		return x.MissingBlocks
+	}
+	return nil
 }
 
 type UploadStatus struct {
@@ -179,7 +357,7 @@ type UploadStatus struct {
 func (x *UploadStatus) Reset() {
 	*x = UploadStatus{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_fileserve_proto_msgTypes[2]
+		mi := &file_proto_fileserve_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -192,7 +370,7 @@ func (x *UploadStatus) String() string {
 func (*UploadStatus) ProtoMessage() {}
 
 func (x *UploadStatus) ProtoReflect() protoreflect.Message {
-	mi := &file_fileserve_proto_msgTypes[2]
+	mi := &file_proto_fileserve_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -205,7 +383,7 @@ func (x *UploadStatus) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UploadStatus.ProtoReflect.Descriptor instead.
 func (*UploadStatus) Descriptor() ([]byte, []int) {
-	return file_fileserve_proto_rawDescGZIP(), []int{2}
+	return file_proto_fileserve_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *UploadStatus) GetMessage() string {
@@ -227,13 +405,14 @@ type DataBlock struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
+	Hash string `protobuf:"bytes,1,opt,name=hash,proto3" json:"hash,omitempty"`
 	Data []byte `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
 }
 
 func (x *DataBlock) Reset() {
 	*x = DataBlock{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_fileserve_proto_msgTypes[3]
+		mi := &file_proto_fileserve_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -246,7 +425,7 @@ func (x *DataBlock) String() string {
 func (*DataBlock) ProtoMessage() {}
 
 func (x *DataBlock) ProtoReflect() protoreflect.Message {
-	mi := &file_fileserve_proto_msgTypes[3]
+	mi := &file_proto_fileserve_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -259,7 +438,14 @@ func (x *DataBlock) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DataBlock.ProtoReflect.Descriptor instead.
 func (*DataBlock) Descriptor() ([]byte, []int) {
-	return file_fileserve_proto_rawDescGZIP(), []int{3}
+	return file_proto_fileserve_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *DataBlock) GetHash() string {
+	if x != nil {
+		return x.Hash
+	}
+	return ""
 }
 
 func (x *DataBlock) GetData() []byte {
@@ -269,80 +455,134 @@ func (x *DataBlock) GetData() []byte {
 	return nil
 }
 
-var File_fileserve_proto protoreflect.FileDescriptor
+var File_proto_fileserve_proto protoreflect.FileDescriptor
 
-var file_fileserve_proto_rawDesc = []byte{
-	0x0a, 0x0f, 0x66, 0x69, 0x6c, 0x65, 0x73, 0x65, 0x72, 0x76, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x12, 0x09, 0x66, 0x69, 0x6c, 0x65, 0x73, 0x65, 0x72, 0x76, 0x65, 0x22, 0x1d, 0x0a, 0x07,
-	0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x12, 0x12, 0x0a, 0x04, 0x62, 0x6f, 0x64, 0x79, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x62, 0x6f, 0x64, 0x79, 0x22, 0x26, 0x0a, 0x08, 0x46,
-	0x69, 0x6c, 0x65, 0x49, 0x6e, 0x66, 0x6f, 0x12, 0x1a, 0x0a, 0x08, 0x66, 0x69, 0x6c, 0x65, 0x74,
-	0x79, 0x70, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x66, 0x69, 0x6c, 0x65, 0x74,
-	0x79, 0x70, 0x65, 0x22, 0x8a, 0x01, 0x0a, 0x0c, 0x55, 0x70, 0x6c, 0x6f, 0x61, 0x64, 0x53, 0x74,
-	0x61, 0x74, 0x75, 0x73, 0x12, 0x18, 0x0a, 0x07, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x12, 0x36,
-	0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x1e,
-	0x2e, 0x66, 0x69, 0x6c, 0x65, 0x73, 0x65, 0x72, 0x76, 0x65, 0x2e, 0x55, 0x70, 0x6c, 0x6f, 0x61,
-	0x64, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x2e, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x06,
-	0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x22, 0x28, 0x0a, 0x06, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73,
-	0x12, 0x0a, 0x0a, 0x06, 0x55, 0x4b, 0x4e, 0x4f, 0x57, 0x4e, 0x10, 0x00, 0x12, 0x06, 0x0a, 0x02,
-	0x4f, 0x4b, 0x10, 0x01, 0x12, 0x0a, 0x0a, 0x06, 0x46, 0x41, 0x49, 0x4c, 0x45, 0x44, 0x10, 0x02,
-	0x22, 0x1f, 0x0a, 0x09, 0x44, 0x61, 0x74, 0x61, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x12, 0x12, 0x0a,
-	0x04, 0x64, 0x61, 0x74, 0x61, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x04, 0x64, 0x61, 0x74,
-	0x61, 0x32, 0x3c, 0x0a, 0x04, 0x50, 0x69, 0x6e, 0x67, 0x12, 0x34, 0x0a, 0x08, 0x53, 0x61, 0x79,
-	0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x12, 0x12, 0x2e, 0x66, 0x69, 0x6c, 0x65, 0x73, 0x65, 0x72, 0x76,
-	0x65, 0x2e, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x1a, 0x12, 0x2e, 0x66, 0x69, 0x6c, 0x65,
-	0x73, 0x65, 0x72, 0x76, 0x65, 0x2e, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x22, 0x00, 0x32,
-	0x4a, 0x0a, 0x06, 0x55, 0x70, 0x6c, 0x6f, 0x61, 0x64, 0x12, 0x40, 0x0a, 0x0b, 0x55, 0x70, 0x6c,
-	0x6f, 0x61, 0x64, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x12, 0x14, 0x2e, 0x66, 0x69, 0x6c, 0x65, 0x73,
-	0x65, 0x72, 0x76, 0x65, 0x2e, 0x44, 0x61, 0x74, 0x61, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x1a, 0x17,
-	0x2e, 0x66, 0x69, 0x6c, 0x65, 0x73, 0x65, 0x72, 0x76, 0x65, 0x2e, 0x55, 0x70, 0x6c, 0x6f, 0x61,
-	0x64, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x22, 0x00, 0x28, 0x01, 0x42, 0x0d, 0x5a, 0x0b, 0x2f,
-	0x3b, 0x66, 0x69, 0x6c, 0x65, 0x73, 0x65, 0x72, 0x76, 0x65, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x33,
+var file_proto_fileserve_proto_rawDesc = []byte{
+	0x0a, 0x15, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x66, 0x69, 0x6c, 0x65, 0x73, 0x65, 0x72, 0x76,
+	0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x09, 0x66, 0x69, 0x6c, 0x65, 0x73, 0x65, 0x72,
+	0x76, 0x65, 0x22, 0x1d, 0x0a, 0x07, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x12, 0x12, 0x0a,
+	0x04, 0x62, 0x6f, 0x64, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x62, 0x6f, 0x64,
+	0x79, 0x22, 0x26, 0x0a, 0x0c, 0x53, 0x69, 0x6d, 0x70, 0x6c, 0x65, 0x41, 0x6e, 0x73, 0x77, 0x65,
+	0x72, 0x12, 0x16, 0x0a, 0x06, 0x61, 0x6e, 0x73, 0x77, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x08, 0x52, 0x06, 0x61, 0x6e, 0x73, 0x77, 0x65, 0x72, 0x22, 0x5e, 0x0a, 0x08, 0x46, 0x69, 0x6c,
+	0x65, 0x49, 0x6e, 0x66, 0x6f, 0x12, 0x1a, 0x0a, 0x08, 0x66, 0x69, 0x6c, 0x65, 0x6e, 0x61, 0x6d,
+	0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x66, 0x69, 0x6c, 0x65, 0x6e, 0x61, 0x6d,
+	0x65, 0x12, 0x18, 0x0a, 0x07, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01,
+	0x28, 0x03, 0x52, 0x07, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x1c, 0x0a, 0x09, 0x62,
+	0x6c, 0x6f, 0x63, 0x6b, 0x6c, 0x69, 0x73, 0x74, 0x18, 0x03, 0x20, 0x03, 0x28, 0x09, 0x52, 0x09,
+	0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x6c, 0x69, 0x73, 0x74, 0x22, 0xdb, 0x01, 0x0a, 0x0b, 0x57, 0x72,
+	0x69, 0x74, 0x65, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x12, 0x35, 0x0a, 0x06, 0x72, 0x65, 0x73,
+	0x75, 0x6c, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x1d, 0x2e, 0x66, 0x69, 0x6c, 0x65,
+	0x73, 0x65, 0x72, 0x76, 0x65, 0x2e, 0x57, 0x72, 0x69, 0x74, 0x65, 0x52, 0x65, 0x73, 0x75, 0x6c,
+	0x74, 0x2e, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x06, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74,
+	0x12, 0x27, 0x0a, 0x0f, 0x63, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x74, 0x5f, 0x76, 0x65, 0x72, 0x73,
+	0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0e, 0x63, 0x75, 0x72, 0x72, 0x65,
+	0x6e, 0x74, 0x56, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x25, 0x0a, 0x0e, 0x6d, 0x69, 0x73,
+	0x73, 0x69, 0x6e, 0x67, 0x5f, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28,
+	0x09, 0x52, 0x0d, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6e, 0x67, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x73,
+	0x22, 0x45, 0x0a, 0x06, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x12, 0x06, 0x0a, 0x02, 0x4f, 0x4b,
+	0x10, 0x00, 0x12, 0x0f, 0x0a, 0x0b, 0x4f, 0x4c, 0x44, 0x5f, 0x56, 0x45, 0x52, 0x53, 0x49, 0x4f,
+	0x4e, 0x10, 0x01, 0x12, 0x12, 0x0a, 0x0e, 0x4d, 0x49, 0x53, 0x53, 0x49, 0x4e, 0x47, 0x5f, 0x42,
+	0x4c, 0x4f, 0x43, 0x4b, 0x53, 0x10, 0x02, 0x12, 0x0e, 0x0a, 0x0a, 0x4e, 0x4f, 0x54, 0x5f, 0x4c,
+	0x45, 0x41, 0x44, 0x45, 0x52, 0x10, 0x03, 0x22, 0x8a, 0x01, 0x0a, 0x0c, 0x55, 0x70, 0x6c, 0x6f,
+	0x61, 0x64, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x18, 0x0a, 0x07, 0x4d, 0x65, 0x73, 0x73,
+	0x61, 0x67, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x4d, 0x65, 0x73, 0x73, 0x61,
+	0x67, 0x65, 0x12, 0x36, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x02, 0x20, 0x01,
+	0x28, 0x0e, 0x32, 0x1e, 0x2e, 0x66, 0x69, 0x6c, 0x65, 0x73, 0x65, 0x72, 0x76, 0x65, 0x2e, 0x55,
+	0x70, 0x6c, 0x6f, 0x61, 0x64, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x2e, 0x53, 0x74, 0x61, 0x74,
+	0x75, 0x73, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x22, 0x28, 0x0a, 0x06, 0x53, 0x74,
+	0x61, 0x74, 0x75, 0x73, 0x12, 0x0a, 0x0a, 0x06, 0x55, 0x4b, 0x4e, 0x4f, 0x57, 0x4e, 0x10, 0x00,
+	0x12, 0x06, 0x0a, 0x02, 0x4f, 0x4b, 0x10, 0x01, 0x12, 0x0a, 0x0a, 0x06, 0x46, 0x41, 0x49, 0x4c,
+	0x45, 0x44, 0x10, 0x02, 0x22, 0x33, 0x0a, 0x09, 0x44, 0x61, 0x74, 0x61, 0x42, 0x6c, 0x6f, 0x63,
+	0x6b, 0x12, 0x12, 0x0a, 0x04, 0x68, 0x61, 0x73, 0x68, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x04, 0x68, 0x61, 0x73, 0x68, 0x12, 0x12, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x0c, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61, 0x32, 0xb5, 0x01, 0x0a, 0x08, 0x4d, 0x65,
+	0x74, 0x61, 0x44, 0x61, 0x74, 0x61, 0x12, 0x34, 0x0a, 0x08, 0x53, 0x61, 0x79, 0x48, 0x65, 0x6c,
+	0x6c, 0x6f, 0x12, 0x12, 0x2e, 0x66, 0x69, 0x6c, 0x65, 0x73, 0x65, 0x72, 0x76, 0x65, 0x2e, 0x4d,
+	0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x1a, 0x12, 0x2e, 0x66, 0x69, 0x6c, 0x65, 0x73, 0x65, 0x72,
+	0x76, 0x65, 0x2e, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x22, 0x00, 0x12, 0x36, 0x0a, 0x08,
+	0x52, 0x65, 0x61, 0x64, 0x46, 0x69, 0x6c, 0x65, 0x12, 0x13, 0x2e, 0x66, 0x69, 0x6c, 0x65, 0x73,
+	0x65, 0x72, 0x76, 0x65, 0x2e, 0x46, 0x69, 0x6c, 0x65, 0x49, 0x6e, 0x66, 0x6f, 0x1a, 0x13, 0x2e,
+	0x66, 0x69, 0x6c, 0x65, 0x73, 0x65, 0x72, 0x76, 0x65, 0x2e, 0x46, 0x69, 0x6c, 0x65, 0x49, 0x6e,
+	0x66, 0x6f, 0x22, 0x00, 0x12, 0x3b, 0x0a, 0x0a, 0x4d, 0x6f, 0x64, 0x69, 0x66, 0x79, 0x46, 0x69,
+	0x6c, 0x65, 0x12, 0x13, 0x2e, 0x66, 0x69, 0x6c, 0x65, 0x73, 0x65, 0x72, 0x76, 0x65, 0x2e, 0x46,
+	0x69, 0x6c, 0x65, 0x49, 0x6e, 0x66, 0x6f, 0x1a, 0x16, 0x2e, 0x66, 0x69, 0x6c, 0x65, 0x73, 0x65,
+	0x72, 0x76, 0x65, 0x2e, 0x57, 0x72, 0x69, 0x74, 0x65, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x22,
+	0x00, 0x32, 0xfd, 0x01, 0x0a, 0x09, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x44, 0x61, 0x74, 0x61, 0x12,
+	0x34, 0x0a, 0x08, 0x53, 0x61, 0x79, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x12, 0x12, 0x2e, 0x66, 0x69,
+	0x6c, 0x65, 0x73, 0x65, 0x72, 0x76, 0x65, 0x2e, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x1a,
+	0x12, 0x2e, 0x66, 0x69, 0x6c, 0x65, 0x73, 0x65, 0x72, 0x76, 0x65, 0x2e, 0x4d, 0x65, 0x73, 0x73,
+	0x61, 0x67, 0x65, 0x22, 0x00, 0x12, 0x3e, 0x0a, 0x0b, 0x55, 0x70, 0x6c, 0x6f, 0x61, 0x64, 0x42,
+	0x6c, 0x6f, 0x63, 0x6b, 0x12, 0x14, 0x2e, 0x66, 0x69, 0x6c, 0x65, 0x73, 0x65, 0x72, 0x76, 0x65,
+	0x2e, 0x44, 0x61, 0x74, 0x61, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x1a, 0x17, 0x2e, 0x66, 0x69, 0x6c,
+	0x65, 0x73, 0x65, 0x72, 0x76, 0x65, 0x2e, 0x55, 0x70, 0x6c, 0x6f, 0x61, 0x64, 0x53, 0x74, 0x61,
+	0x74, 0x75, 0x73, 0x22, 0x00, 0x12, 0x3d, 0x0a, 0x0d, 0x52, 0x65, 0x74, 0x72, 0x69, 0x65, 0x76,
+	0x65, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x12, 0x14, 0x2e, 0x66, 0x69, 0x6c, 0x65, 0x73, 0x65, 0x72,
+	0x76, 0x65, 0x2e, 0x44, 0x61, 0x74, 0x61, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x1a, 0x14, 0x2e, 0x66,
+	0x69, 0x6c, 0x65, 0x73, 0x65, 0x72, 0x76, 0x65, 0x2e, 0x44, 0x61, 0x74, 0x61, 0x42, 0x6c, 0x6f,
+	0x63, 0x6b, 0x22, 0x00, 0x12, 0x3b, 0x0a, 0x08, 0x48, 0x61, 0x73, 0x42, 0x6c, 0x6f, 0x63, 0x6b,
+	0x12, 0x14, 0x2e, 0x66, 0x69, 0x6c, 0x65, 0x73, 0x65, 0x72, 0x76, 0x65, 0x2e, 0x44, 0x61, 0x74,
+	0x61, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x1a, 0x17, 0x2e, 0x66, 0x69, 0x6c, 0x65, 0x73, 0x65, 0x72,
+	0x76, 0x65, 0x2e, 0x53, 0x69, 0x6d, 0x70, 0x6c, 0x65, 0x41, 0x6e, 0x73, 0x77, 0x65, 0x72, 0x22,
+	0x00, 0x42, 0x0a, 0x5a, 0x08, 0x2f, 0x3b, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x79, 0x62, 0x06, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
-	file_fileserve_proto_rawDescOnce sync.Once
-	file_fileserve_proto_rawDescData = file_fileserve_proto_rawDesc
+	file_proto_fileserve_proto_rawDescOnce sync.Once
+	file_proto_fileserve_proto_rawDescData = file_proto_fileserve_proto_rawDesc
 )
 
-func file_fileserve_proto_rawDescGZIP() []byte {
-	file_fileserve_proto_rawDescOnce.Do(func() {
-		file_fileserve_proto_rawDescData = protoimpl.X.CompressGZIP(file_fileserve_proto_rawDescData)
+func file_proto_fileserve_proto_rawDescGZIP() []byte {
+	file_proto_fileserve_proto_rawDescOnce.Do(func() {
+		file_proto_fileserve_proto_rawDescData = protoimpl.X.CompressGZIP(file_proto_fileserve_proto_rawDescData)
 	})
-	return file_fileserve_proto_rawDescData
+	return file_proto_fileserve_proto_rawDescData
 }
 
-var file_fileserve_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_fileserve_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
-var file_fileserve_proto_goTypes = []interface{}{
-	(UploadStatus_Status)(0), // 0: fileserve.UploadStatus.Status
-	(*Message)(nil),          // 1: fileserve.Message
-	(*FileInfo)(nil),         // 2: fileserve.FileInfo
-	(*UploadStatus)(nil),     // 3: fileserve.UploadStatus
-	(*DataBlock)(nil),        // 4: fileserve.DataBlock
+var file_proto_fileserve_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
+var file_proto_fileserve_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_proto_fileserve_proto_goTypes = []interface{}{
+	(WriteResult_Result)(0),  // 0: fileserve.WriteResult.Result
+	(UploadStatus_Status)(0), // 1: fileserve.UploadStatus.Status
+	(*Message)(nil),          // 2: fileserve.Message
+	(*SimpleAnswer)(nil),     // 3: fileserve.SimpleAnswer
+	(*FileInfo)(nil),         // 4: fileserve.FileInfo
+	(*WriteResult)(nil),      // 5: fileserve.WriteResult
+	(*UploadStatus)(nil),     // 6: fileserve.UploadStatus
+	(*DataBlock)(nil),        // 7: fileserve.DataBlock
 }
-var file_fileserve_proto_depIdxs = []int32{
-	0, // 0: fileserve.UploadStatus.status:type_name -> fileserve.UploadStatus.Status
-	1, // 1: fileserve.Ping.SayHello:input_type -> fileserve.Message
-	4, // 2: fileserve.Upload.UploadBlock:input_type -> fileserve.DataBlock
-	1, // 3: fileserve.Ping.SayHello:output_type -> fileserve.Message
-	3, // 4: fileserve.Upload.UploadBlock:output_type -> fileserve.UploadStatus
-	3, // [3:5] is the sub-list for method output_type
-	1, // [1:3] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+var file_proto_fileserve_proto_depIdxs = []int32{
+	0, // 0: fileserve.WriteResult.result:type_name -> fileserve.WriteResult.Result
+	1, // 1: fileserve.UploadStatus.status:type_name -> fileserve.UploadStatus.Status
+	2, // 2: fileserve.MetaData.SayHello:input_type -> fileserve.Message
+	4, // 3: fileserve.MetaData.ReadFile:input_type -> fileserve.FileInfo
+	4, // 4: fileserve.MetaData.ModifyFile:input_type -> fileserve.FileInfo
+	2, // 5: fileserve.BlockData.SayHello:input_type -> fileserve.Message
+	7, // 6: fileserve.BlockData.UploadBlock:input_type -> fileserve.DataBlock
+	7, // 7: fileserve.BlockData.RetrieveBlock:input_type -> fileserve.DataBlock
+	7, // 8: fileserve.BlockData.HasBlock:input_type -> fileserve.DataBlock
+	2, // 9: fileserve.MetaData.SayHello:output_type -> fileserve.Message
+	4, // 10: fileserve.MetaData.ReadFile:output_type -> fileserve.FileInfo
+	5, // 11: fileserve.MetaData.ModifyFile:output_type -> fileserve.WriteResult
+	2, // 12: fileserve.BlockData.SayHello:output_type -> fileserve.Message
+	6, // 13: fileserve.BlockData.UploadBlock:output_type -> fileserve.UploadStatus
+	7, // 14: fileserve.BlockData.RetrieveBlock:output_type -> fileserve.DataBlock
+	3, // 15: fileserve.BlockData.HasBlock:output_type -> fileserve.SimpleAnswer
+	9, // [9:16] is the sub-list for method output_type
+	2, // [2:9] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
-func init() { file_fileserve_proto_init() }
-func file_fileserve_proto_init() {
-	if File_fileserve_proto != nil {
+func init() { file_proto_fileserve_proto_init() }
+func file_proto_fileserve_proto_init() {
+	if File_proto_fileserve_proto != nil {
 		return
 	}
 	if !protoimpl.UnsafeEnabled {
-		file_fileserve_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
+		file_proto_fileserve_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Message); i {
 			case 0:
 				return &v.state
@@ -354,7 +594,19 @@ func file_fileserve_proto_init() {
 				return nil
 			}
 		}
-		file_fileserve_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
+		file_proto_fileserve_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*SimpleAnswer); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_proto_fileserve_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*FileInfo); i {
 			case 0:
 				return &v.state
@@ -366,7 +618,19 @@ func file_fileserve_proto_init() {
 				return nil
 			}
 		}
-		file_fileserve_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+		file_proto_fileserve_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*WriteResult); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_proto_fileserve_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*UploadStatus); i {
 			case 0:
 				return &v.state
@@ -378,7 +642,7 @@ func file_fileserve_proto_init() {
 				return nil
 			}
 		}
-		file_fileserve_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+		file_proto_fileserve_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*DataBlock); i {
 			case 0:
 				return &v.state
@@ -395,21 +659,21 @@ func file_fileserve_proto_init() {
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: file_fileserve_proto_rawDesc,
-			NumEnums:      1,
-			NumMessages:   4,
+			RawDescriptor: file_proto_fileserve_proto_rawDesc,
+			NumEnums:      2,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   2,
 		},
-		GoTypes:           file_fileserve_proto_goTypes,
-		DependencyIndexes: file_fileserve_proto_depIdxs,
-		EnumInfos:         file_fileserve_proto_enumTypes,
-		MessageInfos:      file_fileserve_proto_msgTypes,
+		GoTypes:           file_proto_fileserve_proto_goTypes,
+		DependencyIndexes: file_proto_fileserve_proto_depIdxs,
+		EnumInfos:         file_proto_fileserve_proto_enumTypes,
+		MessageInfos:      file_proto_fileserve_proto_msgTypes,
 	}.Build()
-	File_fileserve_proto = out.File
-	file_fileserve_proto_rawDesc = nil
-	file_fileserve_proto_goTypes = nil
-	file_fileserve_proto_depIdxs = nil
+	File_proto_fileserve_proto = out.File
+	file_proto_fileserve_proto_rawDesc = nil
+	file_proto_fileserve_proto_goTypes = nil
+	file_proto_fileserve_proto_depIdxs = nil
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -420,180 +684,326 @@ var _ grpc.ClientConnInterface
 // is compatible with the grpc package it is being compiled against.
 const _ = grpc.SupportPackageIsVersion6
 
-// PingClient is the client API for Ping service.
+// MetaDataClient is the client API for MetaData service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
-type PingClient interface {
+type MetaDataClient interface {
 	SayHello(ctx context.Context, in *Message, opts ...grpc.CallOption) (*Message, error)
+	ReadFile(ctx context.Context, in *FileInfo, opts ...grpc.CallOption) (*FileInfo, error)
+	ModifyFile(ctx context.Context, in *FileInfo, opts ...grpc.CallOption) (*WriteResult, error)
 }
 
-type pingClient struct {
+type metaDataClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewPingClient(cc grpc.ClientConnInterface) PingClient {
-	return &pingClient{cc}
+func NewMetaDataClient(cc grpc.ClientConnInterface) MetaDataClient {
+	return &metaDataClient{cc}
 }
 
-func (c *pingClient) SayHello(ctx context.Context, in *Message, opts ...grpc.CallOption) (*Message, error) {
+func (c *metaDataClient) SayHello(ctx context.Context, in *Message, opts ...grpc.CallOption) (*Message, error) {
 	out := new(Message)
-	err := c.cc.Invoke(ctx, "/fileserve.Ping/SayHello", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/fileserve.MetaData/SayHello", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// PingServer is the server API for Ping service.
-type PingServer interface {
+func (c *metaDataClient) ReadFile(ctx context.Context, in *FileInfo, opts ...grpc.CallOption) (*FileInfo, error) {
+	out := new(FileInfo)
+	err := c.cc.Invoke(ctx, "/fileserve.MetaData/ReadFile", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *metaDataClient) ModifyFile(ctx context.Context, in *FileInfo, opts ...grpc.CallOption) (*WriteResult, error) {
+	out := new(WriteResult)
+	err := c.cc.Invoke(ctx, "/fileserve.MetaData/ModifyFile", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// MetaDataServer is the server API for MetaData service.
+type MetaDataServer interface {
 	SayHello(context.Context, *Message) (*Message, error)
+	ReadFile(context.Context, *FileInfo) (*FileInfo, error)
+	ModifyFile(context.Context, *FileInfo) (*WriteResult, error)
 }
 
-// UnimplementedPingServer can be embedded to have forward compatible implementations.
-type UnimplementedPingServer struct {
+// UnimplementedMetaDataServer can be embedded to have forward compatible implementations.
+type UnimplementedMetaDataServer struct {
 }
 
-func (*UnimplementedPingServer) SayHello(context.Context, *Message) (*Message, error) {
+func (*UnimplementedMetaDataServer) SayHello(context.Context, *Message) (*Message, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SayHello not implemented")
 }
-
-func RegisterPingServer(s *grpc.Server, srv PingServer) {
-	s.RegisterService(&_Ping_serviceDesc, srv)
+func (*UnimplementedMetaDataServer) ReadFile(context.Context, *FileInfo) (*FileInfo, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ReadFile not implemented")
+}
+func (*UnimplementedMetaDataServer) ModifyFile(context.Context, *FileInfo) (*WriteResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ModifyFile not implemented")
 }
 
-func _Ping_SayHello_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func RegisterMetaDataServer(s *grpc.Server, srv MetaDataServer) {
+	s.RegisterService(&_MetaData_serviceDesc, srv)
+}
+
+func _MetaData_SayHello_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Message)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PingServer).SayHello(ctx, in)
+		return srv.(MetaDataServer).SayHello(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/fileserve.Ping/SayHello",
+		FullMethod: "/fileserve.MetaData/SayHello",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PingServer).SayHello(ctx, req.(*Message))
+		return srv.(MetaDataServer).SayHello(ctx, req.(*Message))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-var _Ping_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "fileserve.Ping",
-	HandlerType: (*PingServer)(nil),
+func _MetaData_ReadFile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FileInfo)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MetaDataServer).ReadFile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/fileserve.MetaData/ReadFile",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MetaDataServer).ReadFile(ctx, req.(*FileInfo))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MetaData_ModifyFile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FileInfo)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MetaDataServer).ModifyFile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/fileserve.MetaData/ModifyFile",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MetaDataServer).ModifyFile(ctx, req.(*FileInfo))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+var _MetaData_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "fileserve.MetaData",
+	HandlerType: (*MetaDataServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "SayHello",
-			Handler:    _Ping_SayHello_Handler,
+			Handler:    _MetaData_SayHello_Handler,
+		},
+		{
+			MethodName: "ReadFile",
+			Handler:    _MetaData_ReadFile_Handler,
+		},
+		{
+			MethodName: "ModifyFile",
+			Handler:    _MetaData_ModifyFile_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "fileserve.proto",
+	Metadata: "proto/fileserve.proto",
 }
 
-// UploadClient is the client API for Upload service.
+// BlockDataClient is the client API for BlockData service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
-type UploadClient interface {
-	UploadBlock(ctx context.Context, opts ...grpc.CallOption) (Upload_UploadBlockClient, error)
+type BlockDataClient interface {
+	SayHello(ctx context.Context, in *Message, opts ...grpc.CallOption) (*Message, error)
+	UploadBlock(ctx context.Context, in *DataBlock, opts ...grpc.CallOption) (*UploadStatus, error)
+	RetrieveBlock(ctx context.Context, in *DataBlock, opts ...grpc.CallOption) (*DataBlock, error)
+	HasBlock(ctx context.Context, in *DataBlock, opts ...grpc.CallOption) (*SimpleAnswer, error)
 }
 
-type uploadClient struct {
+type blockDataClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewUploadClient(cc grpc.ClientConnInterface) UploadClient {
-	return &uploadClient{cc}
+func NewBlockDataClient(cc grpc.ClientConnInterface) BlockDataClient {
+	return &blockDataClient{cc}
 }
 
-func (c *uploadClient) UploadBlock(ctx context.Context, opts ...grpc.CallOption) (Upload_UploadBlockClient, error) {
-	stream, err := c.cc.NewStream(ctx, &_Upload_serviceDesc.Streams[0], "/fileserve.Upload/UploadBlock", opts...)
+func (c *blockDataClient) SayHello(ctx context.Context, in *Message, opts ...grpc.CallOption) (*Message, error) {
+	out := new(Message)
+	err := c.cc.Invoke(ctx, "/fileserve.BlockData/SayHello", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &uploadUploadBlockClient{stream}
-	return x, nil
+	return out, nil
 }
 
-type Upload_UploadBlockClient interface {
-	Send(*DataBlock) error
-	CloseAndRecv() (*UploadStatus, error)
-	grpc.ClientStream
-}
-
-type uploadUploadBlockClient struct {
-	grpc.ClientStream
-}
-
-func (x *uploadUploadBlockClient) Send(m *DataBlock) error {
-	return x.ClientStream.SendMsg(m)
-}
-
-func (x *uploadUploadBlockClient) CloseAndRecv() (*UploadStatus, error) {
-	if err := x.ClientStream.CloseSend(); err != nil {
+func (c *blockDataClient) UploadBlock(ctx context.Context, in *DataBlock, opts ...grpc.CallOption) (*UploadStatus, error) {
+	out := new(UploadStatus)
+	err := c.cc.Invoke(ctx, "/fileserve.BlockData/UploadBlock", in, out, opts...)
+	if err != nil {
 		return nil, err
 	}
-	m := new(UploadStatus)
-	if err := x.ClientStream.RecvMsg(m); err != nil {
+	return out, nil
+}
+
+func (c *blockDataClient) RetrieveBlock(ctx context.Context, in *DataBlock, opts ...grpc.CallOption) (*DataBlock, error) {
+	out := new(DataBlock)
+	err := c.cc.Invoke(ctx, "/fileserve.BlockData/RetrieveBlock", in, out, opts...)
+	if err != nil {
 		return nil, err
 	}
-	return m, nil
+	return out, nil
 }
 
-// UploadServer is the server API for Upload service.
-type UploadServer interface {
-	UploadBlock(Upload_UploadBlockServer) error
-}
-
-// UnimplementedUploadServer can be embedded to have forward compatible implementations.
-type UnimplementedUploadServer struct {
-}
-
-func (*UnimplementedUploadServer) UploadBlock(Upload_UploadBlockServer) error {
-	return status.Errorf(codes.Unimplemented, "method UploadBlock not implemented")
-}
-
-func RegisterUploadServer(s *grpc.Server, srv UploadServer) {
-	s.RegisterService(&_Upload_serviceDesc, srv)
-}
-
-func _Upload_UploadBlock_Handler(srv interface{}, stream grpc.ServerStream) error {
-	return srv.(UploadServer).UploadBlock(&uploadUploadBlockServer{stream})
-}
-
-type Upload_UploadBlockServer interface {
-	SendAndClose(*UploadStatus) error
-	Recv() (*DataBlock, error)
-	grpc.ServerStream
-}
-
-type uploadUploadBlockServer struct {
-	grpc.ServerStream
-}
-
-func (x *uploadUploadBlockServer) SendAndClose(m *UploadStatus) error {
-	return x.ServerStream.SendMsg(m)
-}
-
-func (x *uploadUploadBlockServer) Recv() (*DataBlock, error) {
-	m := new(DataBlock)
-	if err := x.ServerStream.RecvMsg(m); err != nil {
+func (c *blockDataClient) HasBlock(ctx context.Context, in *DataBlock, opts ...grpc.CallOption) (*SimpleAnswer, error) {
+	out := new(SimpleAnswer)
+	err := c.cc.Invoke(ctx, "/fileserve.BlockData/HasBlock", in, out, opts...)
+	if err != nil {
 		return nil, err
 	}
-	return m, nil
+	return out, nil
 }
 
-var _Upload_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "fileserve.Upload",
-	HandlerType: (*UploadServer)(nil),
-	Methods:     []grpc.MethodDesc{},
-	Streams: []grpc.StreamDesc{
+// BlockDataServer is the server API for BlockData service.
+type BlockDataServer interface {
+	SayHello(context.Context, *Message) (*Message, error)
+	UploadBlock(context.Context, *DataBlock) (*UploadStatus, error)
+	RetrieveBlock(context.Context, *DataBlock) (*DataBlock, error)
+	HasBlock(context.Context, *DataBlock) (*SimpleAnswer, error)
+}
+
+// UnimplementedBlockDataServer can be embedded to have forward compatible implementations.
+type UnimplementedBlockDataServer struct {
+}
+
+func (*UnimplementedBlockDataServer) SayHello(context.Context, *Message) (*Message, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SayHello not implemented")
+}
+func (*UnimplementedBlockDataServer) UploadBlock(context.Context, *DataBlock) (*UploadStatus, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UploadBlock not implemented")
+}
+func (*UnimplementedBlockDataServer) RetrieveBlock(context.Context, *DataBlock) (*DataBlock, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RetrieveBlock not implemented")
+}
+func (*UnimplementedBlockDataServer) HasBlock(context.Context, *DataBlock) (*SimpleAnswer, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method HasBlock not implemented")
+}
+
+func RegisterBlockDataServer(s *grpc.Server, srv BlockDataServer) {
+	s.RegisterService(&_BlockData_serviceDesc, srv)
+}
+
+func _BlockData_SayHello_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Message)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BlockDataServer).SayHello(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/fileserve.BlockData/SayHello",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BlockDataServer).SayHello(ctx, req.(*Message))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BlockData_UploadBlock_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DataBlock)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BlockDataServer).UploadBlock(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/fileserve.BlockData/UploadBlock",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BlockDataServer).UploadBlock(ctx, req.(*DataBlock))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BlockData_RetrieveBlock_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DataBlock)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BlockDataServer).RetrieveBlock(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/fileserve.BlockData/RetrieveBlock",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BlockDataServer).RetrieveBlock(ctx, req.(*DataBlock))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BlockData_HasBlock_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DataBlock)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BlockDataServer).HasBlock(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/fileserve.BlockData/HasBlock",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BlockDataServer).HasBlock(ctx, req.(*DataBlock))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+var _BlockData_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "fileserve.BlockData",
+	HandlerType: (*BlockDataServer)(nil),
+	Methods: []grpc.MethodDesc{
 		{
-			StreamName:    "UploadBlock",
-			Handler:       _Upload_UploadBlock_Handler,
-			ClientStreams: true,
+			MethodName: "SayHello",
+			Handler:    _BlockData_SayHello_Handler,
+		},
+		{
+			MethodName: "UploadBlock",
+			Handler:    _BlockData_UploadBlock_Handler,
+		},
+		{
+			MethodName: "RetrieveBlock",
+			Handler:    _BlockData_RetrieveBlock_Handler,
+		},
+		{
+			MethodName: "HasBlock",
+			Handler:    _BlockData_HasBlock_Handler,
 		},
 	},
-	Metadata: "fileserve.proto",
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "proto/fileserve.proto",
 }
